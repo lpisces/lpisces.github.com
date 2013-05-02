@@ -7,8 +7,10 @@
 	<meta name="author" content="lpisces">
 
 	
-	<meta name="description" content="本文简述了如何在linux环境下搭建Octopress博客，并且更新到pages.github.com网站. 备注：下述操作是基于ubuntu 12.04 安装rvm 官方推荐非root用户的单用户安装模式，如下为单用户安装模式。 安装rvm 1
-curl -L https://get.rvm. &hellip;">
+	<meta name="description" content="本文描述了如何快速搭建LNMP(linux, nginx, mysql, php)开发环境. 备注：下述操作是基于ubuntu 12.04 安装所需软件包 安装所需软件包 1
+2
+sudo aptitude update
+sudo aptitude install nginx php5-cli &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -73,6 +75,367 @@ curl -L https://get.rvm. &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/05/02/da-jian-lnmphuan-jing/">
+		
+			搭建LNMP环境</a>
+	</h2>
+	<div class="entry-content">
+		<p>本文描述了如何快速搭建LNMP(linux, nginx, mysql, php)开发环境.</p>
+
+<p><em>备注：下述操作是基于ubuntu 12.04</em></p>
+
+<h2>安装所需软件包</h2>
+
+<figure class='code'><figcaption><span>安装所需软件包 </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo aptitude update
+</span><span class='line'>sudo aptitude install nginx php5-cli php5-cgi spawn-fcgi psmisc
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>建立web根目录</h2>
+
+<figure class='code'><figcaption><span>安装所需软件包 </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mkdir -p /var/www/demo
+</span><span class='line'>mkdir -p /var/www/demo/logs
+</span><span class='line'>chown -R www-data:www-data /var/www/demo
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置nginx vhost文件</h2>
+
+<h3>unix sockets方式</h3>
+
+<figure class='code'><figcaption><span>/etc/nginx/sites-enabled/demo </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server {
+</span><span class='line'>    server_name www.demo.com demo.com;
+</span><span class='line'>    access_log /var/www/demo/logs/access.log;
+</span><span class='line'>    error_log /var/www/demo/logs/error.log;
+</span><span class='line'>    root /var/www/demo;
+</span><span class='line'>
+</span><span class='line'>    location / {
+</span><span class='line'>        index  index.html index.htm index.php;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    location ~ \.php$ {
+</span><span class='line'>        include /etc/nginx/fastcgi_params;
+</span><span class='line'>        fastcgi_pass unix:/var/run/php-fastcgi/php-fastcgi.socket;
+</span><span class='line'>        fastcgi_index index.php;
+</span><span class='line'>        fastcgi_param SCRIPT_FILENAME /srv/www/demo$fastcgi_script_name;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>tcp sockets方式</h3>
+
+<figure class='code'><figcaption><span>/etc/nginx/sites-enabled/demo </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server {
+</span><span class='line'>    server_name www.demo.com demo.com;
+</span><span class='line'>    access_log /var/www/demo/logs/access.log;
+</span><span class='line'>    error_log /var/www/demo/logs/error.log;
+</span><span class='line'>    root /var/www/demo;
+</span><span class='line'>
+</span><span class='line'>    location / {
+</span><span class='line'>        index  index.html index.htm;
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    location ~ \.php$ {
+</span><span class='line'>        include /etc/nginx/fastcgi_params;
+</span><span class='line'>        fastcgi_pass 127.0.0.1:9000;
+</span><span class='line'>        fastcgi_index index.php;
+</span><span class='line'>        fastcgi_param SCRIPT_FILENAME /var/www/demo$fastcgi_script_name;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置php-fastcgi</h2>
+
+<h3>unix sockets方式</h3>
+
+<figure class='code'><figcaption><span>/usr/bin/php-fastcgi </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
+</span><span class='line'>
+</span><span class='line'>FASTCGI_USER=www-data
+</span><span class='line'>FASTCGI_GROUP=www-data
+</span><span class='line'>SOCKET=/var/run/php-fastcgi/php-fastcgi.socket
+</span><span class='line'>PIDFILE=/var/run/php-fastcgi/php-fastcgi.pid
+</span><span class='line'>CHILDREN=6
+</span><span class='line'>PHP5=/usr/bin/php5-cgi
+</span><span class='line'>
+</span><span class='line'>/usr/bin/spawn-fcgi -s $SOCKET -P $PIDFILE -C $CHILDREN -u $FASTCGI_USER -g $FASTCGI_GROUP -f $PHP5</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>tcp sockets方式</h3>
+
+<figure class='code'><figcaption><span>/usr/bin/php-fastcgi </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/bin/bash
+</span><span class='line'>
+</span><span class='line'>FASTCGI_USER=www-data
+</span><span class='line'>FASTCGI_GROUP=www-data
+</span><span class='line'>ADDRESS=127.0.0.1
+</span><span class='line'>PORT=9000
+</span><span class='line'>PIDFILE=/var/run/php-fastcgi/php-fastcgi.pid
+</span><span class='line'>CHILDREN=6
+</span><span class='line'>PHP5=/usr/bin/php5-cgi
+</span><span class='line'>
+</span><span class='line'>/usr/bin/spawn-fcgi -a $ADDRESS -p $PORT -P $PIDFILE -C $CHILDREN -u $FASTCGI_USER -g $FASTCGI_GROUP -f $PHP5</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设置可执行</p>
+
+<figure class='code'><figcaption><span>/usr/bin/php-fastcgi </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chmod +x /usr/bin/php-fastcgi</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>php-fastcgi管理脚本</h3>
+
+<figure class='code'><figcaption><span>/etc/init.d/php-fastcgi </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class='d'><span class='line'><span class="err">#</span><span class="p">!/</span><span class="n">bin</span><span class="p">/</span><span class="n">bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">PHP_SCRIPT</span><span class="p">=/</span><span class="n">usr</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span><span class="n">php</span><span class="p">-</span><span class="n">fastcgi</span>
+</span><span class='line'><span class="n">FASTCGI_USER</span><span class="p">=</span><span class="n">www</span><span class="p">-</span><span class="n">data</span>
+</span><span class='line'><span class="n">FASTCGI_GROUP</span><span class="p">=</span><span class="n">www</span><span class="p">-</span><span class="n">data</span>
+</span><span class='line'><span class="n">PID_DIR</span><span class="p">=/</span><span class="n">var</span><span class="p">/</span><span class="n">run</span><span class="p">/</span><span class="n">php</span><span class="p">-</span><span class="n">fastcgi</span>
+</span><span class='line'><span class="n">PID_FILE</span><span class="p">=/</span><span class="n">var</span><span class="p">/</span><span class="n">run</span><span class="p">/</span><span class="n">php</span><span class="p">-</span><span class="n">fastcgi</span><span class="p">/</span><span class="n">php</span><span class="p">-</span><span class="n">fastcgi</span><span class="p">.</span><span class="n">pid</span>
+</span><span class='line'><span class="n">RET_VAL</span><span class="p">=</span><span class="mi">0</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="s">&quot;$1&quot;</span> <span class="k">in</span>
+</span><span class='line'>    <span class="n">start</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">[[</span> <span class="p">!</span> <span class="p">-</span><span class="n">d</span> <span class="p">$</span><span class="n">PID_DIR</span> <span class="p">]]</span>
+</span><span class='line'>      <span class="n">then</span>
+</span><span class='line'>        <span class="n">mkdir</span> <span class="p">$</span><span class="n">PID_DIR</span>
+</span><span class='line'>        <span class="n">chown</span> <span class="p">$</span><span class="n">FASTCGI_USER</span><span class="p">:$</span><span class="n">FASTCGI_GROUP</span> <span class="p">$</span><span class="n">PID_DIR</span>
+</span><span class='line'>        <span class="n">chmod</span> <span class="mo">0770</span> <span class="p">$</span><span class="n">PID_DIR</span>
+</span><span class='line'>      <span class="n">fi</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">[[</span> <span class="p">-</span><span class="n">r</span> <span class="p">$</span><span class="n">PID_FILE</span> <span class="p">]]</span>
+</span><span class='line'>      <span class="n">then</span>
+</span><span class='line'>        <span class="n">echo</span> <span class="s">&quot;php-fastcgi already running with PID `cat $PID_FILE`&quot;</span>
+</span><span class='line'>        <span class="n">RET_VAL</span><span class="p">=</span><span class="mi">1</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="p">$</span><span class="n">PHP_SCRIPT</span>
+</span><span class='line'>        <span class="n">RET_VAL</span><span class="p">=$?</span>
+</span><span class='line'>      <span class="n">fi</span>
+</span><span class='line'>  <span class="p">;;</span>
+</span><span class='line'>    <span class="n">stop</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">[[</span> <span class="p">-</span><span class="n">r</span> <span class="p">$</span><span class="n">PID_FILE</span> <span class="p">]]</span>
+</span><span class='line'>      <span class="n">then</span>
+</span><span class='line'>        <span class="n">kill</span> <span class="s">`cat $PID_FILE`</span>
+</span><span class='line'>        <span class="n">rm</span> <span class="p">$</span><span class="n">PID_FILE</span>
+</span><span class='line'>        <span class="n">RET_VAL</span><span class="p">=$?</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="n">echo</span> <span class="s">&quot;Could not find PID file $PID_FILE&quot;</span>
+</span><span class='line'>        <span class="n">RET_VAL</span><span class="p">=</span><span class="mi">1</span>
+</span><span class='line'>      <span class="n">fi</span>
+</span><span class='line'>  <span class="p">;;</span>
+</span><span class='line'>    <span class="n">restart</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">[[</span> <span class="p">-</span><span class="n">r</span> <span class="p">$</span><span class="n">PID_FILE</span> <span class="p">]]</span>
+</span><span class='line'>      <span class="n">then</span>
+</span><span class='line'>        <span class="n">kill</span> <span class="s">`cat $PID_FILE`</span>
+</span><span class='line'>        <span class="n">rm</span> <span class="p">$</span><span class="n">PID_FILE</span>
+</span><span class='line'>        <span class="n">RET_VAL</span><span class="p">=$?</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="n">echo</span> <span class="s">&quot;Could not find PID file $PID_FILE&quot;</span>
+</span><span class='line'>      <span class="n">fi</span>
+</span><span class='line'>      <span class="p">$</span><span class="n">PHP_SCRIPT</span>
+</span><span class='line'>      <span class="n">RET_VAL</span><span class="p">=$?</span>
+</span><span class='line'>  <span class="p">;;</span>
+</span><span class='line'>    <span class="n">status</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">[[</span> <span class="p">-</span><span class="n">r</span> <span class="p">$</span><span class="n">PID_FILE</span> <span class="p">]]</span>
+</span><span class='line'>      <span class="n">then</span>
+</span><span class='line'>        <span class="n">echo</span> <span class="s">&quot;php-fastcgi running with PID `cat $PID_FILE`&quot;</span>
+</span><span class='line'>        <span class="n">RET_VAL</span><span class="p">=$?</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>        <span class="n">echo</span> <span class="s">&quot;Could not find PID file $PID_FILE, php-fastcgi does not appear to be running&quot;</span>
+</span><span class='line'>      <span class="n">fi</span>
+</span><span class='line'>  <span class="p">;;</span>
+</span><span class='line'>    <span class="p">*)</span>
+</span><span class='line'>      <span class="n">echo</span> <span class="s">&quot;Usage: php-fastcgi {start|stop|restart|status}&quot;</span>
+</span><span class='line'>      <span class="n">RET_VAL</span><span class="p">=</span><span class="mi">1</span>
+</span><span class='line'>  <span class="p">;;</span>
+</span><span class='line'><span class="n">esac</span>
+</span><span class='line'><span class="n">exit</span> <span class="p">$</span><span class="n">RET_VAL</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>启动php-fastcgi</h3>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chmod +x /etc/init.d/php-fastcgi
+</span><span class='line'>update-rc.d php-fastcgi defaults
+</span><span class='line'>/etc/init.d/php-fastcgi start
+</span><span class='line'>/etc/init.d/nginx start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装mysql</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>aptitude install mysql-server php5-mysql
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-02T09:26:00+08:00" pubdate data-updated="true">May 2<span>nd</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/mysql-nginx/'>mysql nginx</a>, <a class='category' href='/blog/categories/php/'>php</a>
+
+
+</div>
+	
+</div></article>
 
 
     <article class="post">
