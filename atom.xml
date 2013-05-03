@@ -4,7 +4,7 @@
   <title><![CDATA[迷失的鱼]]></title>
   <link href="http://lpisces.github.io/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-03T21:56:55+08:00</updated>
+  <updated>2013-05-03T21:58:57+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -93,7 +93,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<h3>备份</h3>
 
+<p>使用导出虚拟机备份，推荐使用ova格式。</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: virtualbox | 迷失的鱼]]></title>
   <link href="http://lpisces.github.io/blog/categories/virtualbox/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-03T21:56:55+08:00</updated>
+  <updated>2013-05-03T21:58:57+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -99,6 +99,10 @@
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;SUBSYSTEM<span class="o">==</span><span class="s2">&quot;net&quot;</span>, <span class="nv">ACTION</span><span class="o">==</span><span class="s2">&quot;add&quot;</span>, <span class="nv">DRIVERS</span><span class="o">==</span><span class="s2">&quot;?&lt;em&gt;&quot;</span>, ATTR<span class="o">{</span>address<span class="o">}==</span><span class="s2">&quot;08:00:27:fc:ab:9d&quot;</span>, ATTR<span class="o">{</span>dev_id<span class="o">}==</span><span class="s2">&quot;0x0&quot;</span>, ATTR<span class="o">{</span><span class="nb">type</span><span class="o">}==</span><span class="s2">&quot;1&quot;</span>, <span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;eth&lt;/em&gt;&quot;</span>, <span class="nv">NAME</span><span class="o">=</span><span class="s2">&quot;eth0&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h3>备份</h3>
+
+<p>使用导出虚拟机备份，推荐使用ova格式。</p>
 ]]></content>
   </entry>
   
