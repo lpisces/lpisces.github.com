@@ -11,19 +11,25 @@
         <lastmod>2013-05-02T10:50:20+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://lpisces.github.io/blog/2013/05/03/shi-yong-virtualboxda-jian-linuxhuan-jing/
+        </loc>
+        <lastmod>2013-05-03T21:53:09+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://lpisces.github.io/robots.txt</loc>
         <lastmod>2013-04-29T14:30:51+08:00</lastmod>
     </url>
     <url>
-        <loc>http://lpisces.github.io/feed/index.xml</loc>
-        <lastmod>2013-04-29T14:32:05+08:00</lastmod>
+        <loc>http://lpisces.github.io/</loc>
+        <lastmod>2013-05-03T21:53:09+08:00</lastmod>
     </url>
     <url>
         <loc>http://lpisces.github.io/blog/archives/</loc>
-        <lastmod>2013-05-02T10:50:20+08:00</lastmod>
+        <lastmod>2013-05-03T21:53:09+08:00</lastmod>
     </url>
     <url>
-        <loc>http://lpisces.github.io/</loc>
-        <lastmod>2013-05-02T10:50:20+08:00</lastmod>
+        <loc>http://lpisces.github.io/feed/index.xml</loc>
+        <lastmod>2013-04-29T14:32:05+08:00</lastmod>
     </url>
 </urlset>
