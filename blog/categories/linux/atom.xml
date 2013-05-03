@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | 迷失的鱼]]></title>
   <link href="http://lpisces.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-03T21:53:13+08:00</updated>
+  <updated>2013-05-03T21:54:46+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -35,6 +35,12 @@
 
 <ol>
 <li><p>在建立虚拟磁盘可以选择动态分配，并且尽量大一些，虽然vbox提供resize操作，但是十分不方便。动态分配磁盘不会占据很多磁盘空间。</p></li>
+<li><p>尽量选择i386发型版,并且将cpu的PAE选项勾选上。</p></li>
+<li><p>在有网络的时候将网卡从nat方式改成桥接模式，便于ssh访问。</p></li>
+<li><p>没有网络的时候可以使用如下命令映射端口，使用ssh访问
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>VBoxManage modifyvm "hostname" --natpf1 "guestssh,tcp,,2222,,22"</span></code></pre></td></tr></table></div></figure></notextile></div>
+然后使用2222端口访问ssh服务。</p></li>
 <li><p>安装完成后，可以同过clone来重复安装相同版本发行版，但是会遇到网卡问题。解决方式如下：</p></li>
 </ol>
 
@@ -81,16 +87,6 @@
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;SUBSYSTEM<span class="o">==</span><span class="s2">&quot;net&quot;</span>, <span class="nv">ACTION</span><span class="o">==</span><span class="s2">&quot;add&quot;</span>, <span class="nv">DRIVERS</span><span class="o">==</span><span class="s2">&quot;?&lt;em&gt;&quot;</span>, ATTR<span class="o">{</span>address<span class="o">}==</span><span class="s2">&quot;08:00:27:fc:ab:9d&quot;</span>, ATTR<span class="o">{</span>dev_id<span class="o">}==</span><span class="s2">&quot;0x0&quot;</span>, ATTR<span class="o">{</span><span class="nb">type</span><span class="o">}==</span><span class="s2">&quot;1&quot;</span>, <span class="nv">KERNEL</span><span class="o">==</span><span class="s2">&quot;eth&lt;/em&gt;&quot;</span>, <span class="nv">NAME</span><span class="o">=</span><span class="s2">&quot;eth0&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
-
-<ol>
-<li><p>尽量选择i386发型版,并且将cpu的PAE选项勾选上。</p></li>
-<li><p>在有网络的时候将网卡从nat方式改成桥接模式，便于ssh访问。</p></li>
-<li><p>没有网络的时候可以使用如下命令映射端口，使用ssh访问
-<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>VBoxManage modifyvm "hostname" --natpf1 "guestssh,tcp,,2222,,22"</span></code></pre></td></tr></table></div></figure></notextile></div>
-然后使用2222端口访问ssh服务。</p></li>
-</ol>
-
 ]]></content>
   </entry>
   
