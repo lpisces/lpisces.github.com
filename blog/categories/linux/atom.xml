@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | 迷失的鱼]]></title>
   <link href="http://lpisces.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-03T21:54:46+08:00</updated>
+  <updated>2013-05-03T21:56:55+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -33,16 +33,28 @@
 
 <h3>磁盘大小选择</h3>
 
-<ol>
-<li><p>在建立虚拟磁盘可以选择动态分配，并且尽量大一些，虽然vbox提供resize操作，但是十分不方便。动态分配磁盘不会占据很多磁盘空间。</p></li>
-<li><p>尽量选择i386发型版,并且将cpu的PAE选项勾选上。</p></li>
+<ul>
+<li>在建立虚拟磁盘可以选择动态分配，并且尽量大一些，虽然vbox提供resize操作，但是十分不方便。动态分配磁盘不会占据很多磁盘空间。</li>
+</ul>
+
+
+<h3>版本选择</h3>
+
+<ul>
+<li>尽量选择i386发型版,并且将cpu的PAE选项勾选上。</li>
+</ul>
+
+
+<h3>网络</h3>
+
+<ul>
 <li><p>在有网络的时候将网卡从nat方式改成桥接模式，便于ssh访问。</p></li>
 <li><p>没有网络的时候可以使用如下命令映射端口，使用ssh访问
 <div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>VBoxManage modifyvm "hostname" --natpf1 "guestssh,tcp,,2222,,22"</span></code></pre></td></tr></table></div></figure></notextile></div>
 然后使用2222端口访问ssh服务。</p></li>
 <li><p>安装完成后，可以同过clone来重复安装相同版本发行版，但是会遇到网卡问题。解决方式如下：</p></li>
-</ol>
+</ul>
 
 
 <p>注释掉第一个网卡，并改名第二个网卡为eth0</p>
