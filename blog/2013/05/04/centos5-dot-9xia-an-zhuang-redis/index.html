@@ -128,7 +128,7 @@ wget http://www.canonware. &hellip;">
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>安装redis</h3>
+<h2>安装redis</h2>
 
 <figure class='code'><figcaption><span>安装redis</span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -140,7 +140,7 @@ wget http://www.canonware. &hellip;">
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>修改文件</h4>
+<h3>修改文件</h3>
 
 <pre>
 Makefile开头加 CFLAGS= -march=i686
@@ -160,7 +160,7 @@ src/.make_settings里的OPT，改为OPT=-O2  -march=i686
 
 <p>make test会卡住， 忽略之</p>
 
-<h4>配置redis</h4>
+<h3>配置redis</h3>
 
 <figure class='code'><figcaption><span>/etc/init.d/redis_6379 </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>

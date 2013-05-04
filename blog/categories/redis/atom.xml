@@ -4,7 +4,7 @@
   <title><![CDATA[Category: redis | 迷失的鱼]]></title>
   <link href="http://lpisces.github.io/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-04T17:28:33+08:00</updated>
+  <updated>2013-05-04T17:31:35+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -63,7 +63,7 @@
 </span><span class='line'>make install
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<h3>安装redis</h3>
+<h2>安装redis</h2>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>安装redis</span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -74,7 +74,7 @@
 </span><span class='line'><span class="nb">cd </span>redis-2.6.13
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-<h4>修改文件</h4>
+<h3>修改文件</h3>
 
 <pre>
 Makefile开头加 CFLAGS= -march=i686
@@ -90,7 +90,7 @@ src/.make_settings里的OPT，改为OPT=-O2  -march=i686
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 make test会卡住， 忽略之</p>
 
-<h4>配置redis</h4>
+<h3>配置redis</h3>
 
 <p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>/etc/init.d/redis_6379 </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
