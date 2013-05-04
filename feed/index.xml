@@ -4,7 +4,7 @@
   <title><![CDATA[迷失的鱼]]></title>
   <link href="http://lpisces.github.io/feed" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-03T21:58:57+08:00</updated>
+  <updated>2013-05-04T16:32:30+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -12,6 +12,221 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[centos5.9下安装redis]]></title>
+    <link href="http://lpisces.github.io/blog/2013/05/04/centos5-dot-9xia-an-zhuang-redis/"/>
+    <updated>2013-05-04T11:37:00+08:00</updated>
+    <id>http://lpisces.github.io/blog/2013/05/04/centos5-dot-9xia-an-zhuang-redis</id>
+    <content type="html"><![CDATA[<p>本文描述了如何在centos5.9环境下安装redis</p>
+
+<h2>安装编译环境</h2>
+
+<h3>安装编译器</h3>
+
+<figure class='code'><figcaption><span>安装编译器gcc</span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install gcc gcc-c++ kernel-devel
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装jemalloc</h3>
+
+<figure class='code'><figcaption><span>安装jemalloc</span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://www.canonware.com/download/jemalloc/jemalloc-3.3.1.tar.bz2
+</span><span class='line'>tar xfvj jemalloc-3.3.1.tar.bz2
+</span><span class='line'><span class="nb">cd </span>jemalloc-3.3.1
+</span><span class='line'>./configure
+</span><span class='line'>make
+</span><span class='line'>make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装tcl</h3>
+
+<figure class='code'><figcaption><span>安装tcl</span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://prdownloads.sourceforge.net/tcl/tcl8.6.0-src.tar.gz
+</span><span class='line'>tar xfvz tcl8.6.0-src.tar.gz
+</span><span class='line'><span class="nb">cd </span>tcl8.6.0/unix
+</span><span class='line'>./configure
+</span><span class='line'>make
+</span><span class='line'>make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装redis</h3>
+
+<figure class='code'><figcaption><span>安装redis</span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://redis.googlecode.com/files/redis-2.6.13.tar.gz
+</span><span class='line'>tar xvfz redis-2.6.13.tar.gz
+</span><span class='line'><span class="nb">cd </span>redis-2.6.13
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>修改文件</h4>
+
+<pre>
+Makefile开头加 CFLAGS= -march=i686
+src/.make_settings里的OPT，改为OPT=-O2  -march=i686
+</pre>
+
+
+
+
+<figure class='code'><figcaption><span>安装redis</span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>make <span class="nb">test</span>
+</span><span class='line'>make
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>make test会卡住， 忽略之</p>
+
+<h4>配置redis</h4>
+
+<figure class='code'><figcaption><span>/etc/init.d/redis_6379 </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='d'><span class='line'><span class="n">sudo</span> <span class="n">cp</span> <span class="n">src</span><span class="p">/</span><span class="n">redis</span><span class="p">-</span><span class="n">server</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">local</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span>
+</span><span class='line'><span class="n">sudo</span> <span class="n">cp</span> <span class="n">src</span><span class="p">/</span><span class="n">redis</span><span class="p">-</span><span class="n">cli</span> <span class="p">/</span><span class="n">usr</span><span class="p">/</span><span class="n">local</span><span class="p">/</span><span class="n">bin</span><span class="p">/</span>
+</span><span class='line'><span class="n">mkdir</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">redis</span>
+</span><span class='line'><span class="n">mkdir</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">redis</span>
+</span><span class='line'><span class="n">cp</span> <span class="n">utils</span><span class="p">/</span><span class="n">redis_init_script</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">init</span><span class="p">.</span><span class="n">d</span><span class="p">/</span><span class="n">redis_6379</span>
+</span><span class='line'><span class="n">cp</span> <span class="n">redis</span><span class="p">.</span><span class="n">conf</span> <span class="p">/</span><span class="n">etc</span><span class="p">/</span><span class="n">redis</span><span class="p">/</span><span class="mf">6379.</span><span class="n">conf</span>
+</span><span class='line'><span class="n">mkdir</span> <span class="p">/</span><span class="n">var</span><span class="p">/</span><span class="n">redis</span><span class="p">/</span><span class="mi">6379</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vim /etc/redis/6379.conf</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>daemonize yes
+</span><span class='line'>pidfile /var/run/redis.pid
+</span><span class='line'>port 6379
+</span><span class='line'>timeout 0
+</span><span class='line'>tcp-keepalive 0
+</span><span class='line'>loglevel notice
+</span><span class='line'>logfile /var/log/redis_6379.log
+</span><span class='line'>databases 16
+</span><span class='line'>save 900 1
+</span><span class='line'>save 300 10
+</span><span class='line'>save 60 10000
+</span><span class='line'>stop-writes-on-bgsave-error yes
+</span><span class='line'>rdbcompression yes
+</span><span class='line'>rdbchecksum yes
+</span><span class='line'>dbfilename dump.rdb
+</span><span class='line'>dir /var/redis/6379
+</span><span class='line'>slave-serve-stale-data yes
+</span><span class='line'>slave-read-only yes
+</span><span class='line'>repl-disable-tcp-nodelay no
+</span><span class='line'>slave-priority 100
+</span><span class='line'>appendonly no
+</span><span class='line'>appendfsync everysec
+</span><span class='line'>no-appendfsync-on-rewrite no
+</span><span class='line'>auto-aof-rewrite-percentage 100
+</span><span class='line'>auto-aof-rewrite-min-size 64mb
+</span><span class='line'>lua-time-limit 5000
+</span><span class='line'>slowlog-log-slower-than 10000
+</span><span class='line'>slowlog-max-len 128
+</span><span class='line'>hash-max-ziplist-entries 512
+</span><span class='line'>hash-max-ziplist-value 64
+</span><span class='line'>list-max-ziplist-entries 512
+</span><span class='line'>list-max-ziplist-value 64
+</span><span class='line'>set-max-intset-entries 512
+</span><span class='line'>zset-max-ziplist-entries 128
+</span><span class='line'>zset-max-ziplist-value 64
+</span><span class='line'>activerehashing yes
+</span><span class='line'>client-output-buffer-limit normal 0 0 0
+</span><span class='line'>client-output-buffer-limit slave 256mb 64mb 60
+</span><span class='line'>client-output-buffer-limit pubsub 32mb 8mb 60
+</span><span class='line'>hz 10
+</span><span class='line'>aof-rewrite-incremental-fsync yes
+</span><span class='line'>#绑定ip
+</span><span class='line'>#bind 127.0.0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>启动redis</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>redis-server /etc/redis/6379.conf</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>测试</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>redis-cli
+</span><span class='line'>redis 127.0.0.1:6379> ping
+</span><span class='line'>PONG</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使用VirtualBox搭建linux环境]]></title>
