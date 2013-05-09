@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | 迷失的鱼]]></title>
   <link href="http://lpisces.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-09T10:51:04+08:00</updated>
+  <updated>2013-05-09T11:36:34+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[设置 centos 中 iptables 遇到的问题]]></title>
+    <link href="http://lpisces.github.io/blog/2013/05/09/she-zhi-centos-zhong-iptables-yu-dao-de-wen-ti/"/>
+    <updated>2013-05-09T11:27:00+08:00</updated>
+    <id>http://lpisces.github.io/blog/2013/05/09/she-zhi-centos-zhong-iptables-yu-dao-de-wen-ti</id>
+    <content type="html"><![CDATA[<p>接上篇，装完nginx之后，80端口访问不了。查了一下是iptables的问题，当时先简单把iptables停了
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>service iptables start
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>下面来说打开80端口时遇到的一个坑。centos默认的配置规则中有这么一条。
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>REJECT     all  --  anywhere             anywhere            reject-with icmp-host-prohibited
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>当使用如下命令打开端口时
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>iptables -p tcp -A RH-Firewall-1-INPUT  --dport 80 -j ACCEPT
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>80端口仍然无法访问，因为上述命令将规则加在最后一条，在这之前就被上行命令给拒掉了，所以完全是没有意义的。只能插在那条之前才能生效。
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>iptables -p tcp -I RH-Firewall-1-INPUT 5 --dport 80 -j ACCEPT
+</span><span class='line'>service iptables save
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>--EOF--</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[centos环境下搭建LNMP]]></title>
