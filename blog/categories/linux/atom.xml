@@ -4,7 +4,7 @@
   <title><![CDATA[Category: linux | 迷失的鱼]]></title>
   <link href="http://lpisces.github.io/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-09T11:45:07+08:00</updated>
+  <updated>2013-05-09T19:57:47+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -938,19 +938,22 @@
 
 <h3>修改文件</h3>
 
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>安装redis</span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>make <span class="nb">test</span>
+</span><span class='line'>make
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>若make失败请做如下修改</p>
+
 <pre>
 Makefile开头加 CFLAGS= -march=i686
 src/.make_settings里的OPT，改为OPT=-O2  -march=i686
 </pre>
 
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>安装redis</span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>make <span class="nb">test</span>
-</span><span class='line'>make
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-make test会卡住， 忽略之</p>
+<p>make test会卡住， 忽略之</p>
 
 <h3>配置redis</h3>
 
