@@ -4,7 +4,7 @@
   <title><![CDATA[Category: nginx | 迷失的鱼]]></title>
   <link href="http://lpisces.github.io/blog/categories/nginx/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-09T10:19:20+08:00</updated>
+  <updated>2013-05-09T10:27:56+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -755,6 +755,70 @@
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>chkconfig --add nginx
 </span><span class='line'>chkconfig --level 2345 nginx on
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>配置文件</h2>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;建立虚拟机目录&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;mkdir -p /usr/local/nginx/sites-enabled
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>虚拟机配置文件
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>server <span class="o">{</span>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;server_name www.demo.com demo.com;
+</span><span class='line'>access_log /srv/www/demo/logs/access.log;
+</span><span class='line'>error_log /srv/www/demo/logs/error.log;
+</span><span class='line'>root /srv/www/demo;
+</span><span class='line'>
+</span><span class='line'>location / <span class="o">{</span>
+</span><span class='line'>    index  index.html index.htm index.php;
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>location ~ <span class="se">\.</span>php<span class="nv">$ </span><span class="o">{</span>
+</span><span class='line'>    include /usr/local/nginx/conf/fastcgi_params;
+</span><span class='line'>    <span class="c">#fastcgi_pass unix:/var/run/php-fastcgi/php-fastcgi.socket;</span>
+</span><span class='line'>    fastcgi_pass  127.0.0.1:9000;
+</span><span class='line'>    fastcgi_index index.php;
+</span><span class='line'>    fastcgi_param SCRIPT_FILENAME /srv/www/demo<span class="nv">$fastcgi_script_name</span>;
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>在/usr/local/nginx/conf/nginx.conf 加入如下行
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>include /usr/local/nginx/sites-enabled/*;
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <h1>安装mysql</h1>
