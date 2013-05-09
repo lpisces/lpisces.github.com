@@ -7,14 +7,9 @@
 	<meta name="author" content="lpisces">
 
 	
-	<meta name="description" content="本文描述了如何在centos5.9环境下安装redis 安装编译环境 安装编译器 安装编译器gcc 1
-yum install gcc gcc-c++ kernel-devel 安装jemalloc 安装jemalloc 1
+	<meta name="description" content="本文描述了如何在centos5.9环境下搭建LNMP环境 吐槽: 之前在ubuntu下面搭过一次，这次因为某种需要再来一次，无语。。。 使用网页的软件源 1
 2
-3
-4
-5
-6
-wget http://www.canonware &hellip;">
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base. &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +74,660 @@ wget http://www.canonware &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/05/09/centoshuan-jing-xia-da-jian-lnmp/">
+		
+			centos环境下搭建LNMP</a>
+	</h2>
+	<div class="entry-content">
+		<p>本文描述了如何在centos5.9环境下搭建LNMP环境</p>
+
+<p><em>吐槽: 之前在ubuntu下面搭过一次，这次因为某种需要再来一次，无语。。。</em></p>
+
+<h1>使用网页的软件源</h1>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+</span><span class='line'>wget http://mirrors.163.com/.help/CentOS5-Base-163.repo -O /etc/yum.repos.d/CentOS-Base-163.repo
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>安装php</h1>
+
+<h2>卸载系统默认php</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum remove php php-common
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装php5.3</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install php53 php53-devel php53-cli
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装spawn-fcgi, php-fastcgi</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget http://centos.alt.ru/repository/centos/5/i386/centalt-release-5-3.noarch.rpm
+</span><span class='line'>yum install spawn-fcgi
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>php-fastcgi脚本</h2>
+
+<p>/usr/bin/php-fastcgi</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'>/usr/bin/spawn-fcgi -a 127.0.0.1 -p 9000 -C 6 -u nginx -g nginx -f /usr/bin/php-cgi
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>/etc/init.d/php-fastcgi</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># php-fastcgi - Use PHP as a FastCGI process via nginx.</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># chkconfig: - 85 15</span>
+</span><span class='line'><span class="c"># description: Use PHP as a FastCGI process via nginx.</span>
+</span><span class='line'><span class="c"># processname: php-fastcgi</span>
+</span><span class='line'><span class="c"># pidfile: /var/run/php-fastcgi.pid</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Source function library.</span>
+</span><span class='line'>. /etc/rc.d/init.d/functions
+</span><span class='line'>
+</span><span class='line'><span class="c"># Source networking configuration.</span>
+</span><span class='line'>. /etc/sysconfig/network
+</span><span class='line'>
+</span><span class='line'><span class="c"># Check that networking is up.</span>
+</span><span class='line'><span class="o">[</span> <span class="s2">&quot;$NETWORKING&quot;</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">exit </span>0
+</span><span class='line'>
+</span><span class='line'><span class="nv">phpfastcgi</span><span class="o">=</span><span class="s2">&quot;/usr/bin/php-fastcgi&quot;</span>
+</span><span class='line'><span class="nv">prog</span><span class="o">=</span><span class="k">$(</span>basename php-cgi<span class="k">)</span>
+</span><span class='line'><span class="nv">cgi</span><span class="o">=</span><span class="s1">&#39;/usr/bin/php-cgi&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">lockfile</span><span class="o">=</span>/var/lock/subsys/php-fastcgi
+</span><span class='line'>
+</span><span class='line'>start<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="o">[</span> -x <span class="nv">$phpfastcgi</span> <span class="o">]</span> <span class="o">||</span> <span class="nb">exit </span>5
+</span><span class='line'>    <span class="nb">echo</span> -n <span class="s2">$&quot;Starting $prog: &quot;</span>
+</span><span class='line'>    daemon <span class="nv">$phpfastcgi</span>
+</span><span class='line'>    <span class="nv">retval</span><span class="o">=</span><span class="nv">$?</span>
+</span><span class='line'>    <span class="nb">echo</span>
+</span><span class='line'>    <span class="o">[</span> <span class="nv">$retval</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> touch <span class="nv">$lockfile</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nv">$retval</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>stop<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nb">echo</span> -n <span class="s2">$&quot;Stopping $prog: &quot;</span>
+</span><span class='line'>    killproc <span class="nv">$prog</span> -TERM
+</span><span class='line'>    <span class="nv">retval</span><span class="o">=</span><span class="nv">$?</span>
+</span><span class='line'>    <span class="nb">echo</span>
+</span><span class='line'>    <span class="o">[</span> <span class="nv">$retval</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -f <span class="nv">$lockfile</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nv">$retval</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>restart<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c">#configtest || return $?</span>
+</span><span class='line'>    stop
+</span><span class='line'>    start
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>reload<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="c">#configtest || return $?</span>
+</span><span class='line'>    <span class="nb">echo</span> -n <span class="s2">$&quot;Reloading $prog: &quot;</span>
+</span><span class='line'>    killproc <span class="nv">$prog</span> -HUP
+</span><span class='line'>    <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+</span><span class='line'>    <span class="nb">echo</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>force_reload<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    restart
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>rh_status<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    status <span class="nv">$prog</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>rh_status_q<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    rh_status &gt;/dev/null 2&gt;&amp;1
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="s2">&quot;$1&quot;</span> in
+</span><span class='line'>    start<span class="o">)</span>
+</span><span class='line'>        rh_status_q <span class="o">&amp;&amp;</span> <span class="nb">exit </span>0
+</span><span class='line'>        <span class="nv">$1</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    stop<span class="o">)</span>
+</span><span class='line'>        rh_status_q <span class="o">||</span> <span class="nb">exit </span>0
+</span><span class='line'>        <span class="nv">$1</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    restart|configtest<span class="o">)</span>
+</span><span class='line'>        <span class="nv">$1</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    reload<span class="o">)</span>
+</span><span class='line'>        rh_status_q <span class="o">||</span> <span class="nb">exit </span>7
+</span><span class='line'>        <span class="nv">$1</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    force-reload<span class="o">)</span>
+</span><span class='line'>        force_reload
+</span><span class='line'>        ;;
+</span><span class='line'>    status<span class="o">)</span>
+</span><span class='line'>        rh_status
+</span><span class='line'>        ;;
+</span><span class='line'>    condrestart|try-restart<span class="o">)</span>
+</span><span class='line'>        rh_status_q <span class="o">||</span> <span class="nb">exit </span>0
+</span><span class='line'>        ;;
+</span><span class='line'>    *<span class="o">)</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">$&quot;Usage: $0 {start|stop|status|restart}&quot;</span>
+</span><span class='line'>        <span class="nb">exit </span>2
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>fastcgi加入服务</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chkconfig --add php-fastcgi
+</span><span class='line'>chkconfig php-fastcgi on
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>安装扩展</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install php53-mysql php53-mbstring
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装phpredis</h3>
+
+<ul>
+<li>编译安装</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget https://github.com/nicolasff/phpredis/archive/master.zip
+</span><span class='line'>unzip master
+</span><span class='line'><span class="nb">cd </span>phpredis-master/
+</span><span class='line'>phpize
+</span><span class='line'>make <span class="o">&amp;&amp;</span> make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>增加文件/etc/php.d/redis.ini</li>
+</ul>
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>; Enable redis extension module
+</span><span class='line'><span class="nv">extension</span><span class="o">=</span>redis.so
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>安装nginx</h1>
+
+<h2>编译安装</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install zlib-devel openssl openssl-devel pcre pcre-devel
+</span><span class='line'>wget http://nginx.org/download/nginx-1.4.1.tar.gz
+</span><span class='line'>tar xvfz nginx-1.4.1.tar.gz
+</span><span class='line'><span class="nb">cd </span>nginx-1.4.1
+</span><span class='line'>./configure --with-http_ssl_module
+</span><span class='line'>make <span class="o">&amp;&amp;</span> make install
+</span><span class='line'>useradd -M -r --shell /sbin/nologin --home-dir /opt/nginx nginx
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>控制脚本</h2>
+
+<p>/etc/rc.d/init.d/nginx</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># nginx - this script starts and stops the nginx daemon</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># chkconfig:   - 85 15 </span>
+</span><span class='line'><span class="c"># description:  Nginx is an HTTP(S) server, HTTP(S) reverse \</span>
+</span><span class='line'><span class="c">#               proxy and IMAP/POP3 proxy server</span>
+</span><span class='line'><span class="c"># processname: nginx</span>
+</span><span class='line'><span class="c"># config:      /etc/nginx/nginx.conf</span>
+</span><span class='line'><span class="c"># config:      /etc/sysconfig/nginx</span>
+</span><span class='line'><span class="c"># pidfile:     /var/run/nginx.pid</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Source function library.</span>
+</span><span class='line'>. /etc/rc.d/init.d/functions
+</span><span class='line'>
+</span><span class='line'><span class="c"># Source networking configuration.</span>
+</span><span class='line'>. /etc/sysconfig/network
+</span><span class='line'>
+</span><span class='line'><span class="c"># Check that networking is up.</span>
+</span><span class='line'><span class="o">[</span> <span class="s2">&quot;$NETWORKING&quot;</span> <span class="o">=</span> <span class="s2">&quot;no&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">exit </span>0
+</span><span class='line'>
+</span><span class='line'><span class="nv">nginx</span><span class="o">=</span><span class="s2">&quot;/usr/local/nginx/sbin/nginx&quot;</span>
+</span><span class='line'><span class="nv">prog</span><span class="o">=</span><span class="k">$(</span>basename <span class="nv">$nginx</span><span class="k">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">NGINX_CONF_FILE</span><span class="o">=</span><span class="s2">&quot;/usr/local/nginx/conf/nginx.conf&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">[</span> -f /etc/sysconfig/nginx <span class="o">]</span> <span class="o">&amp;&amp;</span> . /etc/sysconfig/nginx
+</span><span class='line'>
+</span><span class='line'><span class="nv">lockfile</span><span class="o">=</span>/var/lock/subsys/nginx
+</span><span class='line'>
+</span><span class='line'>make_dirs<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>   <span class="c"># make required directories</span>
+</span><span class='line'>   <span class="nv">user</span><span class="o">=</span><span class="sb">`</span><span class="nv">$nginx</span> -V 2&gt;&amp;1 | grep <span class="s2">&quot;configure arguments:&quot;</span> | sed <span class="s1">&#39;s/[^*]*--user=\([^ ]*\).*/\1/g&#39;</span> -<span class="sb">`</span>
+</span><span class='line'>   <span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;`grep $user /etc/passwd`&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">       </span>useradd -M -s /bin/nologin <span class="nv">$user</span>
+</span><span class='line'>   <span class="k">fi</span>
+</span><span class='line'><span class="k">   </span><span class="nv">options</span><span class="o">=</span><span class="sb">`</span><span class="nv">$nginx</span> -V 2&gt;&amp;1 | grep <span class="s1">&#39;configure arguments:&#39;</span><span class="sb">`</span>
+</span><span class='line'>   <span class="k">for </span>opt in <span class="nv">$options</span>; <span class="k">do</span>
+</span><span class='line'><span class="k">       if</span> <span class="o">[</span> <span class="sb">`</span><span class="nb">echo</span> <span class="nv">$opt</span> | grep <span class="s1">&#39;.*-temp-path&#39;</span><span class="sb">`</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">           </span><span class="nv">value</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$opt</span> | cut -d <span class="s2">&quot;=&quot;</span> -f 2<span class="sb">`</span>
+</span><span class='line'>           <span class="k">if</span> <span class="o">[</span> ! -d <span class="s2">&quot;$value&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>               <span class="c"># echo &quot;creating&quot; $value</span>
+</span><span class='line'>               mkdir -p <span class="nv">$value</span> <span class="o">&amp;&amp;</span> chown -R <span class="nv">$user</span> <span class="nv">$value</span>
+</span><span class='line'>           <span class="k">fi</span>
+</span><span class='line'><span class="k">       fi</span>
+</span><span class='line'><span class="k">   done</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>start<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="o">[</span> -x <span class="nv">$nginx</span> <span class="o">]</span> <span class="o">||</span> <span class="nb">exit </span>5
+</span><span class='line'>    <span class="o">[</span> -f <span class="nv">$NGINX_CONF_FILE</span> <span class="o">]</span> <span class="o">||</span> <span class="nb">exit </span>6
+</span><span class='line'>    <span class="c">#make_dirs</span>
+</span><span class='line'>    <span class="nb">echo</span> -n <span class="s2">$&quot;Starting $prog: &quot;</span>
+</span><span class='line'>    daemon <span class="nv">$nginx</span> -c <span class="nv">$NGINX_CONF_FILE</span>
+</span><span class='line'>    <span class="nv">retval</span><span class="o">=</span><span class="nv">$?</span>
+</span><span class='line'>    <span class="nb">echo</span>
+</span><span class='line'>    <span class="o">[</span> <span class="nv">$retval</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> touch <span class="nv">$lockfile</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nv">$retval</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>stop<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nb">echo</span> -n <span class="s2">$&quot;Stopping $prog: &quot;</span>
+</span><span class='line'>    killproc <span class="nv">$prog</span> -QUIT
+</span><span class='line'>    <span class="nv">retval</span><span class="o">=</span><span class="nv">$?</span>
+</span><span class='line'>    <span class="nb">echo</span>
+</span><span class='line'>    <span class="o">[</span> <span class="nv">$retval</span> -eq 0 <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -f <span class="nv">$lockfile</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nv">$retval</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>restart<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    configtest <span class="o">||</span> <span class="k">return</span> <span class="nv">$?</span>
+</span><span class='line'>    stop
+</span><span class='line'>    sleep 1
+</span><span class='line'>    start
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>reload<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    configtest <span class="o">||</span> <span class="k">return</span> <span class="nv">$?</span>
+</span><span class='line'>    <span class="nb">echo</span> -n <span class="s2">$&quot;Reloading $prog: &quot;</span>
+</span><span class='line'>    killproc <span class="nv">$nginx</span> -HUP
+</span><span class='line'>    <span class="nv">RETVAL</span><span class="o">=</span><span class="nv">$?</span>
+</span><span class='line'>    <span class="nb">echo</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>force_reload<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    restart
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>configtest<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="nv">$nginx</span> -t -c <span class="nv">$NGINX_CONF_FILE</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>rh_status<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    status <span class="nv">$prog</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>rh_status_q<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    rh_status &gt;/dev/null 2&gt;&amp;1
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="s2">&quot;$1&quot;</span> in
+</span><span class='line'>    start<span class="o">)</span>
+</span><span class='line'>        rh_status_q <span class="o">&amp;&amp;</span> <span class="nb">exit </span>0
+</span><span class='line'>        <span class="nv">$1</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    stop<span class="o">)</span>
+</span><span class='line'>        rh_status_q <span class="o">||</span> <span class="nb">exit </span>0
+</span><span class='line'>        <span class="nv">$1</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    restart|configtest<span class="o">)</span>
+</span><span class='line'>        <span class="nv">$1</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    reload<span class="o">)</span>
+</span><span class='line'>        rh_status_q <span class="o">||</span> <span class="nb">exit </span>7
+</span><span class='line'>        <span class="nv">$1</span>
+</span><span class='line'>        ;;
+</span><span class='line'>    force-reload<span class="o">)</span>
+</span><span class='line'>        force_reload
+</span><span class='line'>        ;;
+</span><span class='line'>    status<span class="o">)</span>
+</span><span class='line'>        rh_status
+</span><span class='line'>        ;;
+</span><span class='line'>    condrestart|try-restart<span class="o">)</span>
+</span><span class='line'>        rh_status_q <span class="o">||</span> <span class="nb">exit </span>0
+</span><span class='line'>            ;;
+</span><span class='line'>    *<span class="o">)</span>
+</span><span class='line'>        <span class="nb">echo</span> <span class="s2">$&quot;Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}&quot;</span>
+</span><span class='line'>        <span class="nb">exit </span>2
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>加入服务</h2>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chkconfig --add nginx
+</span><span class='line'>chkconfig --level 2345 nginx on
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>安装mysql</h1>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install mysql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>启动</h1>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>service nginx start
+</span><span class='line'>service php-fastcgi start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>tips</h1>
+
+<ul>
+<li>由于centos默认的iptables是开着的，所以上述装好之后，需要关闭iptables或者配置规则才能使用。</li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-09T09:38:00+08:00" pubdate data-updated="true">May 9<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/centos/'>centos</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/mysql/'>mysql</a>, <a class='category' href='/blog/categories/nginx/'>nginx</a>, <a class='category' href='/blog/categories/php/'>php</a>
+
+
+</div>
+	
+</div></article>
 
 
     <article class="post">
