@@ -4,7 +4,7 @@
   <title><![CDATA[Category: centos | 迷失的鱼]]></title>
   <link href="http://lpisces.github.io/blog/categories/centos/atom.xml" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-09T19:57:47+08:00</updated>
+  <updated>2013-05-11T10:52:28+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在centos上安装服务]]></title>
+    <link href="http://lpisces.github.io/blog/2013/05/11/zai-centosshang-an-zhuang-fu-wu/"/>
+    <updated>2013-05-11T10:42:00+08:00</updated>
+    <id>http://lpisces.github.io/blog/2013/05/11/zai-centosshang-an-zhuang-fu-wu</id>
+    <content type="html"><![CDATA[<h1>目标</h1>
+
+<p>简单记录一下如何在centos上安装服务。</p>
+
+<ul>
+<li><p>为了实现在centos/linux上实现开机启动，一般有两种做法 *</p></li>
+<li><p>在/etc/rc.local上写启动脚本</p></li>
+<li><p>安装成服务,然后定义其run level</p></li>
+</ul>
+
+
+<p>下面简单说说安装成服务的过程</p>
+
+<ul>
+<li><p>在/etc/init.d/目录下编写启动脚本</p></li>
+<li><p>使用chkconfig命令添加服务。
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chkconfig --add nginx
+</span><span class='line'>chkconfig [--level 2345] nginx on</span></code></pre></td></tr></table></div></figure></notextile></div></p></li>
+</ul>
+
+
+<p>启动脚本有一定的要求，主要是要求在脚本开头的注释有一定的格式。形如这样</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;!/bin/sh&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;#&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;nginx - this script starts and stops the nginx daemon&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;#&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;chkconfig:   - 85 15&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;description:  Nginx is an HTTP<span class="o">(</span>S<span class="o">)</span> server, HTTP<span class="o">(</span>S<span class="o">)</span> reverse <span class="se">\&lt;</span>/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;proxy and IMAP/POP3 proxy server&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;processname: nginx&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;config:      /etc/nginx/nginx.conf&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;config:      /etc/sysconfig/nginx&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;pidfile:     /var/run/nginx.pid&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>--EOF--</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[设置 centos 中 iptables 遇到的问题]]></title>

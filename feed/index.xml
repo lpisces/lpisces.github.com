@@ -4,7 +4,7 @@
   <title><![CDATA[迷失的鱼]]></title>
   <link href="http://lpisces.github.io/feed" rel="self"/>
   <link href="http://lpisces.github.io/"/>
-  <updated>2013-05-09T19:57:47+08:00</updated>
+  <updated>2013-05-11T10:52:28+08:00</updated>
   <id>http://lpisces.github.io/</id>
   <author>
     <name><![CDATA[lpisces]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[在centos上安装服务]]></title>
+    <link href="http://lpisces.github.io/blog/2013/05/11/zai-centosshang-an-zhuang-fu-wu/"/>
+    <updated>2013-05-11T10:42:00+08:00</updated>
+    <id>http://lpisces.github.io/blog/2013/05/11/zai-centosshang-an-zhuang-fu-wu</id>
+    <content type="html"><![CDATA[<h1>目标</h1>
+
+<p>简单记录一下如何在centos上安装服务。</p>
+
+<ul>
+<li><p>为了实现在centos/linux上实现开机启动，一般有两种做法 *</p></li>
+<li><p>在/etc/rc.local上写启动脚本</p></li>
+<li><p>安装成服务,然后定义其run level</p></li>
+</ul>
+
+
+<p>下面简单说说安装成服务的过程</p>
+
+<ul>
+<li><p>在/etc/init.d/目录下编写启动脚本</p></li>
+<li><p>使用chkconfig命令添加服务。</p></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>chkconfig --add nginx
+</span><span class='line'>chkconfig [--level 2345] nginx on</span></code></pre></td></tr></table></div></figure>
+
+
+<p>启动脚本有一定的要求，主要是要求在脚本开头的注释有一定的格式。形如这样</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># nginx - this script starts and stops the nginx daemon</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># chkconfig:   - 85 15</span>
+</span><span class='line'><span class="c"># description:  Nginx is an HTTP(S) server, HTTP(S) reverse \</span>
+</span><span class='line'><span class="c">#               proxy and IMAP/POP3 proxy server</span>
+</span><span class='line'><span class="c"># processname: nginx</span>
+</span><span class='line'><span class="c"># config:      /etc/nginx/nginx.conf</span>
+</span><span class='line'><span class="c"># config:      /etc/sysconfig/nginx</span>
+</span><span class='line'><span class="c"># pidfile:     /var/run/nginx.pid</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&#8211;EOF&#8211;</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[设置 centos 中 iptables 遇到的问题]]></title>
